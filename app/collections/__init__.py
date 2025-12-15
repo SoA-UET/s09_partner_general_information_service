@@ -18,3 +18,7 @@ db = client.get_default_database()
 
 conversations_collection = db.conversations
 messages_collection = db.messages
+
+# Partner database collections
+partner_db = client.get_database("telcenter_partner_partner")
+partner_information_collection = partner_db.information

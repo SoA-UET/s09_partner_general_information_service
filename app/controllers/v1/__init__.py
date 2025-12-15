@@ -13,5 +13,7 @@ _api = Api(
 )
 
 from .conversations import api as conversations_api
+from .partner_info import api as partner_info_api
 
 _api.add_namespace(conversations_api)
+_api.add_namespace(partner_info_api)

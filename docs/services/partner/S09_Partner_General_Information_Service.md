@@ -63,7 +63,7 @@ Note that the base URL to call the services
 must be specified via `.env`. Construct
 a `.env.example` file for that.
 
-[A12](../../api_groups/A12.md)
+[A12b](../../api_groups/A12.md)
 
 [H11](../../api_groups/H11.md)
 

@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, url_for
+from flask import Flask, Blueprint, url_for, redirect
 from flask_socketio import SocketIO
 from ..utils.streaming import Streaming
 
@@ -64,3 +64,7 @@ def register_api_controllers(app: Flask, socketio: SocketIO):
         </div>
         </body></html>
         """
+
+    @app.get('/', strict_slashes=False)
+    def index():
+        return redirect('/api')
