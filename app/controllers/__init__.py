@@ -1,6 +1,4 @@
 from flask import Flask, Blueprint, url_for, redirect
-from flask_socketio import SocketIO
-from ..utils.streaming import Streaming
 
 class ApiVersion:
     def __init__(self, name, blueprint):
@@ -28,17 +26,10 @@ API_VERSIONS = [
 
 
 
-def register_api_controllers(app: Flask, socketio: SocketIO):
+def register_api_controllers(app: Flask):
     for api_version in API_VERSIONS:
         app.register_blueprint(api_version.blueprint)
 
-        streaming_apis = getattr(api_version.blueprint, '_streamings', None)
-        if streaming_apis and len(streaming_apis) > 0:
-            for streaming_api in streaming_apis:
-                if not isinstance(streaming_api, Streaming):
-                    raise TypeError("Expected Streaming instance")
-                streaming_api.register(socketio)
-    
     def build_api_version_doc_link(api_version):
         # type: (ApiVersion) -> str
         swagger_url = url_for(f"{api_version.name}.doc")

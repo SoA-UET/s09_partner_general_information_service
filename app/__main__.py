@@ -21,7 +21,7 @@ def main():
     """Main entry point for S09 Partner General Information Service."""
     print("[S09] Starting Partner General Information Service...")
     
-    from . import app, socketio
+    from . import app
 
     # Initialize and start A12 RabbitMQ handler
     a12_handler = A12Handler(partner_information_service)
@@ -45,16 +45,8 @@ def main():
     
     print(f"[S09] Starting HTTP server on {host}:{port}")
     print(f"[S09] API documentation available at http://{host}:{port}/api")
-    
-    # Run the Flask application
-    # Using socketio.run for WebSocket support (if needed in future)
-    socketio.run(
-        app,
-        host=host,
-        port=port,
-        debug=debug,
-        allow_unsafe_werkzeug=True,  # For development
-    )
+
+    app.run(host=host, port=port, debug=debug)
 
 
 if __name__ == "__main__":

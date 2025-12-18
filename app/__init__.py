@@ -10,8 +10,10 @@ SERVICE_NAME = "Telcenter Consultation Service" # change this
 
 from flask import Flask, url_for
 from flask_cors import CORS
-from flask_socketio import SocketIO
 import os 
+
+import dotenv
+dotenv.load_dotenv()
 
 app = Flask(__name__)
 
@@ -19,7 +21,7 @@ app.url_map.strict_slashes = False
 
 CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
 
-socketio = SocketIO(app, cors_allowed_origins=CORS_ORIGINS, async_mode='threading')
+print(f"CORS origins set to: {CORS_ORIGINS}")
 
 CORS(
     app, 
@@ -34,7 +36,7 @@ app.config['JSON_SORT_KEYS'] = False
 
 with app.app_context():
     from .controllers import register_api_controllers
-    register_api_controllers(app, socketio)
+    register_api_controllers(app)
 
     from .utils.auth import init_auth
     init_auth()
