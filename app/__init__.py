@@ -19,13 +19,14 @@ app.url_map.strict_slashes = False
 
 CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
 
-socketio = SocketIO(app, cors_allowed_origins=CORS_ORIGINS)
+socketio = SocketIO(app, cors_allowed_origins=CORS_ORIGINS, async_mode='threading')
 
-CORS(app, 
-     origins=CORS_ORIGINS,
-     supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
-     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CORS(
+    app, 
+    origins=CORS_ORIGINS,
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Accept", "Authorization", "X-Requested-With"],
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 )
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
