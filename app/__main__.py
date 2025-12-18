@@ -8,50 +8,21 @@ This service manages partner connection information and provides:
 """
 
 import os
-import threading
 from dotenv import load_dotenv
 
 # Load environment variables first
 load_dotenv()
 
-from flask import Flask
-from flask_cors import CORS
-from flask_socketio import SocketIO
-
-from .controllers import register_api_controllers
-from .utils.auth import init_auth
 from .services import partner_information_service
 from .amqp import A12Handler
-
-
-def create_app():
-    """Create and configure the Flask application."""
-    app = Flask(__name__)
-    
-    # Enable CORS
-    CORS(app)
-    
-    # Configure app
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
-    app.config['JSON_SORT_KEYS'] = False
-    
-    return app
 
 
 def main():
     """Main entry point for S09 Partner General Information Service."""
     print("[S09] Starting Partner General Information Service...")
     
-    # Create Flask app
-    app = create_app()
-    socketio = SocketIO(app, cors_allowed_origins="*")
-    
-    # Register API controllers (HTTP endpoints)
-    register_api_controllers(app, socketio)
-    
-    # Initialize JWT authentication
-    init_auth()
-    
+    from . import app, socketio
+
     # Initialize and start A12 RabbitMQ handler
     a12_handler = A12Handler(partner_information_service)
     

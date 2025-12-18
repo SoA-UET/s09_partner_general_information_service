@@ -17,19 +17,26 @@ app = Flask(__name__)
 
 app.url_map.strict_slashes = False
 
-socketio = SocketIO(app, cors_allowed_origins="*")
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
 
-allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
+socketio = SocketIO(app, cors_allowed_origins=CORS_ORIGINS)
+
 CORS(app, 
-     origins=allowed_origins,
+     origins=CORS_ORIGINS,
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
      methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 )
 
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
+app.config['JSON_SORT_KEYS'] = False
+
 with app.app_context():
     from .controllers import register_api_controllers
     register_api_controllers(app, socketio)
+
+    from .utils.auth import init_auth
+    init_auth()
 
     @app.get('/')
     def home():
