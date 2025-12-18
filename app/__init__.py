@@ -11,6 +11,7 @@ SERVICE_NAME = "Telcenter Consultation Service" # change this
 from flask import Flask, url_for
 from flask_cors import CORS
 from flask_socketio import SocketIO
+import os 
 
 app = Flask(__name__)
 
@@ -18,7 +19,13 @@ app.url_map.strict_slashes = False
 
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-CORS(app)  # Enable CORS for all routes
+allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
+CORS(app, 
+     origins=allowed_origins,
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+)
 
 with app.app_context():
     from .controllers import register_api_controllers
